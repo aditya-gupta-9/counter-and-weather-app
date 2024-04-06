@@ -1,0 +1,25 @@
+<div class="container-fluid bg-light p-4">
+  <div class="container">
+    <div class="row bg-warning p-2">
+      <div class="col d-flex gap-2 justify-content-center">
+        <button mat-flat-button color="warn" (click)="countersService.resetCounters()">RESET</button>
+        <button mat-flat-button color="primary" (click)="countersService.addCounter()">ADD</button>
+      </div>
+    </div>
+    <div
+      class="row border rounded-2 bg-white my-2"
+      *ngFor="let record of countersService.counters | async; let i = index"
+    >
+      <div class="d-flex gap-2 flex-wrap p-2">
+        <div class="h-100 bg-primary text-white px-4 rounded-pill d-flex align-items-center">
+          {{ record }}
+        </div>
+        <button mat-flat-button color="accent" (click)="countersService.updateCounter(i, 'INCREMENT')">
+          Increment
+        </button>
+        <button mat-flat-button (click)="countersService.updateCounter(i, 'DECREMENT')">Decrement</button>
+        <button mat-flat-button color="warn" (click)="countersService.deleteCounter(i)">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
