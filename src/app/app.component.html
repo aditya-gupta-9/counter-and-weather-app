@@ -10,9 +10,7 @@
           routerLinkActive="bg-primary"
         >
           <span class="h5 fw-bold m-0 text-center">Counter App</span>
-          <span class="ms-2 px-2 rounded-pill bg-black">{{
-            (countersService.counters | async)?.length
-          }}</span>
+          <span class="ms-2 px-2 rounded-pill bg-white text-black">{{ (counters$ | async)?.length }}</span>
         </button>
       </div>
       <div class="col text-center p-2">
