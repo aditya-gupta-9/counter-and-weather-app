@@ -1,1 +1,64 @@
-<p>weather-details works!</p>
+<div class="container-fluid py-4">
+  <div class="container-fluid border">
+    <div class="row p-2">
+      <div class="col-md-4 p-2">
+        <div class="container-fluid m-0 g-0 border">
+          <div class="row p-2 m-0 g-0">
+            <mat-form-field appearance="outline">
+              <mat-label>TYPE CITY NAME</mat-label>
+              <input type="text" matInput [formControl]="cityNameControl" />
+              <mat-error *ngIf="cityNameControl.hasError('required')">This field is required!</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="row p-2 m-0 g-0">
+            <div class="border-bottom"><small class="text-muted">RECENT LOCATIONS</small></div>
+          </div>
+          <div class="container-fluid overflow-auto g-0" style="height: 50vh">
+            <div class="row p-2 m-0 g-0">
+              <div class="col">London - 12C Cloudy</div>
+              <div class="col-auto">
+                <mat-icon class="me-2">autorenew</mat-icon><mat-icon>close</mat-icon>
+              </div>
+            </div>
+          </div>
+          <div class="row p-2 m-0 g-0">
+            <div class="col text-end"><button mat-flat-button class="bg-info">Clear</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md p-2">
+        <div class="container-fluid p-2 border h-100 m-0 g-0">
+          <div class="row m-0 g-0">
+            <div class="col fw-bold ps-2 h5 m-0 align-self-center">City Name</div>
+            <div class="col-auto"><mat-icon class="h4 m-0 h-auto w-auto d-flex">autorenew</mat-icon></div>
+          </div>
+          <div class="row m-0 g-0 pt-2">
+            <div class="col-auto p-2">
+              <img src="" height="200px" width="200px" />
+            </div>
+            <div class="col p-2 d-flex flex-column justify-content-around">
+              <div class="p-2">15C</div>
+              <div class="p-2">Clear Sky</div>
+              <div class="p-2">Wind: 4ms 160 deg</div>
+              <div class="p-2">Pressure 1024</div>
+            </div>
+          </div>
+          <div class="row m-0 g-0 mt-4">
+            <div class="col-auto p-4">
+              <div class="text-center">10</div>
+              <div class="text-center">Dec</div>
+              <div class="text-center"><img src="" height="40px" width="40px" /></div>
+              <div class="text-center">15C</div>
+            </div>
+            <div class="col-auto p-4">
+              <div class="text-center">10</div>
+              <div class="text-center">Dec</div>
+              <div class="text-center"><img src="" height="40px" width="40px" /></div>
+              <div class="text-center">15C</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
