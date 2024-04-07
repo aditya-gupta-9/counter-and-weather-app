@@ -9,8 +9,8 @@ import {
   deleteCounter,
   incrementCounter,
   resetCounters,
-} from '../counters.action';
-import { State } from '../reducers';
+} from '../../actions/counters.action';
+import { State } from '../../reducers';
 
 @Component({
   selector: 'app-counters',

@@ -8,12 +8,14 @@ export const routes: Routes = [
   },
   {
     path: 'counter',
-    loadComponent: () => import('./counters/counters.component').then((comp) => comp.CountersComponent),
+    loadComponent: () => import('./pages/counters/counters.component').then((comp) => comp.CountersComponent),
   },
   {
     path: 'vatavaran',
     loadComponent: () =>
-      import('./weather-details/weather-details.component').then((comp) => comp.WeatherDetailsComponent),
+      import('./pages/weather-details/weather-details.component').then(
+        (comp) => comp.WeatherDetailsComponent
+      ),
   },
   { path: '**', redirectTo: 'counter' },
 ];
