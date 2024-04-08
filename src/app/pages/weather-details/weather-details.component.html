@@ -20,13 +20,15 @@
             <div class="row p-2 m-0 g-0" *ngFor="let record of cities$ | async">
               <div class="col">{{ record }}</div>
               <div class="col-auto">
-                <mat-icon class="me-2" role="button">autorenew</mat-icon
-                ><mat-icon role="button">close</mat-icon>
+                <mat-icon class="me-2" role="button" (click)="onSearch(record)">autorenew</mat-icon
+                ><mat-icon role="button" (click)="deleteCity(record)">close</mat-icon>
               </div>
             </div>
           </div>
           <div class="row p-2 m-0 g-0">
-            <div class="col text-end"><button mat-flat-button class="bg-info">Clear</button></div>
+            <div class="col text-end">
+              <button mat-flat-button class="bg-info" (click)="clearAllCities()">Clear</button>
+            </div>
           </div>
         </div>
       </div>
@@ -35,17 +37,21 @@
           <ng-container *ngIf="weather$ | async as weather">
             <div class="row m-0 g-0">
               <div class="col fw-bold ps-2 h5 m-0 align-self-center">{{ weather.name }}</div>
-              <div class="col-auto"><mat-icon class="h4 m-0 h-auto w-auto d-flex">autorenew</mat-icon></div>
+              <div class="col-auto">
+                <mat-icon class="h4 m-0 h-auto w-auto d-flex" (click)="onSearch(weather.name)"
+                  >autorenew</mat-icon
+                >
+              </div>
             </div>
             <div class="row m-0 g-0 pt-2">
               <div class="col-auto p-2">
                 <img src="" height="200px" width="200px" />
               </div>
               <div class="col p-2 d-flex flex-column justify-content-around">
-                <div class="p-2">15C</div>
-                <div class="p-2">Clear Sky</div>
-                <div class="p-2">Wind: 4ms 160 deg</div>
-                <div class="p-2">Pressure 1024</div>
+                <div class="p-2">{{ inCelcius(weather.main.temp) | number : "1.0-1" }}°C</div>
+                <div class="p-2">{{ weather.weather[0].description }}</div>
+                <div class="p-2">Wind: {{ weather.wind.speed }}ms {{ weather.wind.deg }} deg</div>
+                <div class="p-2">Pressure: {{ weather.main.pressure }}</div>
               </div>
             </div>
             <div class="row m-0 g-0 mt-4">

@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Observable, Subscription, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { loadCityWeatherData } from '../../stores/weather-store/weather.action';
+import { clearAllCities, deleteCity, loadCityWeatherData } from '../../stores/weather-store/weather.action';
 import { ICityWeather } from '../../stores/weather-store/weather.model';
 import {
   getCityList,
@@ -47,14 +47,31 @@ export class WeatherDetailsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription.add(
       this.weatherError$.subscribe((error) => {
-        if (error) console.error('Weather Data Error Response', error);
+        if (error) {
+          console.error('Weather Data Error Response', error);
+          alert(error);
+        }
       })
     );
   }
 
-  onSearch() {
-    if (this.cityNameControl.value)
-      this._store.dispatch(loadCityWeatherData({ cityName: this.cityNameControl.value }));
+  onSearch(value?: string) {
+    if (value || this.cityNameControl.value)
+      this._store.dispatch(loadCityWeatherData({ cityName: value || this.cityNameControl.value }));
+  }
+
+  inCelcius(value: number) {
+    let fahrenheit = 285;
+    let celsius = (fahrenheit - 32) * (5 / 9);
+    return celsius;
+  }
+
+  deleteCity(cityName: string) {
+    this._store.dispatch(deleteCity({ cityName }));
+  }
+
+  clearAllCities() {
+    this._store.dispatch(clearAllCities());
   }
 
   ngOnDestroy(): void {
