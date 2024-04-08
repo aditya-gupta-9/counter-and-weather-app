@@ -5,7 +5,7 @@ import {
   deleteCounter,
   incrementCounter,
   resetCounters,
-} from '../actions/counters.action';
+} from './counters.actions';
 
 export const initialState: number[] = [];
 

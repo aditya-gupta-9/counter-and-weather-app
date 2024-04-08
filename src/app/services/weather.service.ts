@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ICityWeather } from '../stores/weather-store/weather.model';
 
 @Injectable({
   providedIn: 'root',
@@ -7,11 +9,10 @@ import { Injectable } from '@angular/core';
 export class WeatherService {
   constructor(private httpClient: HttpClient) {}
 
-  getCityWeatherData() {
-    return this.httpClient.get('https://api.openweathermap.org/data/3.0/onecall', {
+  getCityWeatherData(cityName: string): Observable<ICityWeather> {
+    return this.httpClient.get<ICityWeather>('https://api.openweathermap.org/data/2.5/weather', {
       params: {
-        lat: '33.44',
-        lon: '-94.04',
+        q: cityName,
         appid: 'd4594364698122bfd1c4b3eb5f2ff19f',
       },
     });

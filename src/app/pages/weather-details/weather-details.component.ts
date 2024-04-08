@@ -1,12 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { WeatherService } from '../../services/weather.service';
-import { first } from 'rxjs';
+import { Observable, Subscription, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { loadCityWeatherData } from '../../stores/weather-store/weather.action';
+import { ICityWeather } from '../../stores/weather-store/weather.model';
+import {
+  getCityList,
+  getWeather,
+  getWeatherError,
+  getWeatherLoader,
+} from '../../stores/weather-store/weather.selectors';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-weather-details',
@@ -18,15 +27,37 @@ import { first } from 'rxjs';
     MatIconModule,
     MatInputModule,
     ReactiveFormsModule,
+    LoaderComponent,
   ],
   templateUrl: './weather-details.component.html',
   styleUrl: './weather-details.component.scss',
 })
-export class WeatherDetailsComponent implements OnInit {
-  constructor(private _weatherService: WeatherService) {}
-  cityNameControl: FormControl = new FormControl(null, Validators.required);
+export class WeatherDetailsComponent implements OnInit, OnDestroy {
+  constructor(private _store: Store) {}
+  cityNameControl: FormControl = new FormControl('', Validators.required);
+
+  weather$: Observable<ICityWeather | null> = this._store
+    .select(getWeather)
+    .pipe(tap(() => this.cityNameControl.reset()));
+  weatherLoader$: Observable<boolean> = this._store.select(getWeatherLoader);
+  weatherError$: Observable<string> = this._store.select(getWeatherError);
+  cities$: Observable<string[]> = this._store.select(getCityList);
+  subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
-    this._weatherService.getCityWeatherData().pipe(first()).subscribe(console.log);
+    this.subscription.add(
+      this.weatherError$.subscribe((error) => {
+        if (error) console.error('Weather Data Error Response', error);
+      })
+    );
+  }
+
+  onSearch() {
+    if (this.cityNameControl.value)
+      this._store.dispatch(loadCityWeatherData({ cityName: this.cityNameControl.value }));
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

@@ -9,8 +9,8 @@ import {
   deleteCounter,
   incrementCounter,
   resetCounters,
-} from '../../actions/counters.action';
-import { State } from '../../reducers';
+} from '../../stores/counters-store/counters.actions';
+import { IAppState } from '../../stores/reducers';
 
 @Component({
   selector: 'app-counters',
@@ -21,7 +21,7 @@ import { State } from '../../reducers';
 })
 export class CountersComponent implements OnInit {
   counters$?: Observable<number[]>;
-  constructor(private _store: Store<State>) {}
+  constructor(private _store: Store<IAppState>) {}
 
   ngOnInit(): void {
     this.counters$ = this._store.select('counters');
