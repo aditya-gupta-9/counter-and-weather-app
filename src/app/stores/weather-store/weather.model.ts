@@ -51,3 +51,34 @@ export interface ISys {
   sunrise: number;
   sunset: number;
 }
+
+export interface IDailyWeatherData {
+  cod: string;
+  message: number;
+  cnt: number;
+  list: IList[];
+  city: ICity;
+}
+
+export interface IList {
+  dt: number;
+  main: IMain;
+  weather: IWeather[];
+  clouds: IClouds;
+  wind: IWind;
+  visibility: number;
+  pop: number;
+  sys: ISys;
+  dt_txt: string;
+}
+
+export interface ICity {
+  id: number;
+  name: string;
+  coord: ICoord;
+  country: string;
+  population: number;
+  timezone: number;
+  sunrise: number;
+  sunset: number;
+}

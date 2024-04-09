@@ -7,10 +7,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Observable, Subscription, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { clearAllCities, deleteCity, loadCityWeatherData } from '../../stores/weather-store/weather.action';
-import { ICityWeather } from '../../stores/weather-store/weather.model';
+import {
+  clearAllCities,
+  deleteCity,
+  loadCityWeatherData,
+  loadDailyWeatherData,
+} from '../../stores/weather-store/weather.action';
+import { ICityWeather, IDailyWeatherData } from '../../stores/weather-store/weather.model';
 import {
   getCityList,
+  getDailyWeatherData,
   getWeather,
   getWeatherError,
   getWeatherLoader,
@@ -36,12 +42,18 @@ export class WeatherDetailsComponent implements OnInit, OnDestroy {
   constructor(private _store: Store) {}
   cityNameControl: FormControl = new FormControl('', Validators.required);
 
-  weather$: Observable<ICityWeather | null> = this._store
-    .select(getWeather)
-    .pipe(tap(() => this.cityNameControl.reset()));
+  weather$: Observable<ICityWeather | null> = this._store.select(getWeather).pipe(
+    tap((data) => {
+      if (data) {
+        this.cityNameControl.reset();
+        this._store.dispatch(loadDailyWeatherData(data.coord));
+      }
+    })
+  );
   weatherLoader$: Observable<boolean> = this._store.select(getWeatherLoader);
   weatherError$: Observable<string> = this._store.select(getWeatherError);
   cities$: Observable<string[]> = this._store.select(getCityList);
+  dailyData$: Observable<IDailyWeatherData | null> = this._store.select(getDailyWeatherData);
   subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
@@ -72,6 +84,18 @@ export class WeatherDetailsComponent implements OnInit, OnDestroy {
 
   clearAllCities() {
     this._store.dispatch(clearAllCities());
+  }
+
+  getIcon(description: string) {
+    return description.toLowerCase()?.includes('clear')
+      ? '/assets/icons/day.svg'
+      : description.toLowerCase()?.includes('rain')
+      ? '/assets/icons/rainy-1.svg'
+      : description.toLowerCase()?.includes('cloud')
+      ? '/assets/icons/cloudy-day-1.svg'
+      : description.toLowerCase()?.includes('haze')
+      ? '/assets/icons/haze.png'
+      : '/assets/icons/snowy-1.svg';
   }
 
   ngOnDestroy(): void {

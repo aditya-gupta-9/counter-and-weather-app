@@ -5,6 +5,9 @@ import {
   loadCityWeatherData,
   loadCityWeatherDataFailure,
   loadCityWeatherDataSuccess,
+  loadDailyWeatherData,
+  loadDailyWeatherDataFailure,
+  loadDailyWeatherDataSuccess,
 } from './weather.action';
 import { catchError, map, mergeMap, of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -20,6 +23,20 @@ export class WeatherEffects {
           map((data) => loadCityWeatherDataSuccess({ data, cityName })),
           catchError((error: HttpErrorResponse) =>
             of(loadCityWeatherDataFailure({ error: error?.error?.message || 'Something went wrong!' }))
+          )
+        );
+      })
+    )
+  );
+
+  loadDailyWeather$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loadDailyWeatherData),
+      mergeMap((action) => {
+        return this.weatherService.getCityDailyData(action.lat, action.lon).pipe(
+          map((data) => loadDailyWeatherDataSuccess({ dailyData: data })),
+          catchError((error: HttpErrorResponse) =>
+            of(loadDailyWeatherDataFailure({ error: error?.error?.message || 'Something went wrong!' }))
           )
         );
       })
